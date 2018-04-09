@@ -11,7 +11,8 @@ import { BLE } from "@ionic-native/ble";
 export class DevicePage {
   peripheral: any = {};
   statusMessage: string;
-
+  device: any;
+  deviceName: string;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -19,21 +20,21 @@ export class DevicePage {
     private toastCtrl: ToastController,
     private ngZone: NgZone
   ) {
-    let device = navParams.get("device");
+    this.device = navParams.get("device");
+    this.deviceName = this.device.name;
+    this.setStatus("Connecting to " + this.deviceName);
 
-    this.setStatus("Connecting to " + device.name || device.id);
-
-    this.ble
-      .connect(device.id)
-      .subscribe(
-        peripheral => this.onConnected(peripheral),
-        peripheral => this.onDeviceDisconnected(peripheral)
-      );
+    // this.ble
+    //   .connect(this.device.id)
+    //   .subscribe(
+    //     peripheral => this.onConnected(peripheral),
+    //     peripheral => this.onDeviceDisconnected(peripheral)
+    //   );
   }
 
   onConnected(peripheral) {
     this.ngZone.run(() => {
-      this.setStatus("");
+      this.setStatus("connected");
       this.peripheral = peripheral;
     });
   }

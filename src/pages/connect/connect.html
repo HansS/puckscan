@@ -18,7 +18,9 @@
       <p>{{ device.id }}</p>
       <p>RSSI: {{ device.rssi }}</p>
     </button>
+    <button (click)="stopScan()" ion-item>Stop</button>
   </ion-list>
+  <p> {{ device | json }} </p>
 </ion-content>
 
 <ion-footer>

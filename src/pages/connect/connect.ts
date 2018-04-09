@@ -10,6 +10,7 @@ import { DevicePage } from "../device/device";
   templateUrl: "connect.html"
 })
 export class ConnectPage {
+  device: any;
   devices: any[] = [];
   statusMessage: string;
 
@@ -25,20 +26,24 @@ export class ConnectPage {
     this.scan();
   }
 
+  stopScan() {
+    this.ble.stopScan();
+  }
   scan() {
     this.setStatus("Scanning for Bluetooth LE Devices");
     this.devices = []; // clear list
-    this.ble
-      .scan([], 5)
-      .subscribe(
-        device => this.onDeviceDiscovered(device),
-        error => this.scanError(error)
-      );
+    this.ble.startScan([]).subscribe(d => this.onDeviceDiscovered(d));
+    // .startScan([])
+    // .subscribe(
+    //   device => this.onDeviceDiscovered(device),
+    //   error => this.scanError(error)
+    //);
 
     setTimeout(this.setStatus.bind(this), 5000, "Scan complete");
   }
 
   onDeviceDiscovered(device) {
+    this.device = device;
     console.log("Discovered " + JSON.stringify(device, null, 2));
     this.ngZone.run(() => {
       this.devices.push(device);
